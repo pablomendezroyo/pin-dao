@@ -1,0 +1,44 @@
+version: '3'
+services:
+  ipfs:
+    container_name: ipfs-node
+    image: ipfs/go-ipfs:latest
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_PATH=/ipfsdata
+    volumes:
+      - ./data/ipfs:/ipfsdata
+      - ./files-to-upload:/files-to-upload
+    ports:
+      - '4001:4001'
+      - '8080:8080'
+      - '8081:8081'
+      - '5001:5001'
+    expose:
+      - '8080'
+      - '8081'
+      - '5001'
+  pin-dao-ui:
+    container_name: pin-dao-ui
+    build: .
+#    image: pin-dao-ui:latest
+#    environment:
+#      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+#      - 9229:9229
+    command: npm start
+networks:
+    ipfs_node_nw:
+
+#To add a file manually:
+#docker exec ipfs_node ipfs add /files_to_upload/tmp.txt
+
+#To read that file manually:
+#docker exec ipfs_node ipfs cat QmZ3WQa1U4KBnoxJduYQGDbu76Bt3uUuiPBERjFWEEgEAM
+#http://localhost:8080/ipfs/QmZ3WQa1U4KBnoxJduYQGDbu76Bt3uUuiPBERjFWEEgEAM
+
+#NEXT STEP: Add and read files using js-ipfs

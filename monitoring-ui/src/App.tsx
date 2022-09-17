@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import DomainsTable from "./components/DomainsTable/DomainsTable";
 import getAllEnsHash from "./logic/getAllEnsHash";
 import { EnsHash } from "./types/types";

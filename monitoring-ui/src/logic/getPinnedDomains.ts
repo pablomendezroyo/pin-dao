@@ -10,6 +10,5 @@ export default async function getPinnedDomains(): Promise<string[]> {
     provider
   );
 
-  let pinnedEns = await contract.getENSList();
-  return pinnedEns;
+  return await contract.getENSList();
 }

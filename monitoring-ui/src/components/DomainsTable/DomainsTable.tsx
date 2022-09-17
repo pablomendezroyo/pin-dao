@@ -28,7 +28,9 @@ export default function DomainsTable({
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center"> ENS Domain</TableCell>
+            <TableCell sx={{ fontWeight: "bolder" }} align="center">
+              ENS Domain
+            </TableCell>
             <TableCell align="center"> IPFS Hash</TableCell>
             <TableCell align="center"> Access</TableCell>
           </TableRow>
@@ -46,7 +48,9 @@ export default function DomainsTable({
                 {row.ipfsHash}
               </TableCell>
               <TableCell align="center">
-                <Button>
+                <Button
+                  href={"https://ipfs.io/ipfs/" + row.ipfsHash.substring(6)}
+                >
                   <img
                     src="/assets/open-in-new.svg"
                     alt="open-in-new"

@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-const smart_contract_address = "0x0000000000000000000000000000000000000000"
+const smart_contract_address = "0xc8BDAe8196ad92dAc0db3B3e1C74a9ac409fB93D"
 
 func get_ens_list(eth_client_provider *ethclient.Client) []string {
 	sc, err := NewMain(common.HexToAddress(smart_contract_address), eth_client_provider)

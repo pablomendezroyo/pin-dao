@@ -5,8 +5,7 @@ services:
     build: .
     image: "pin-dao-ui.pinner-dao.public.dappnode.eth:0.1.0"
     environment:
-      - REACT_APP_DAPPNODE_URL="https://pinnerdao.3009a247fd38367d.dyndns.dappnode.io/"
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - REACT_APP_DAPPNODE_URL=https://pinnerdao.3009a247fd38367d.dyndns.dappnode.io/
+    ports:
+      - "3000:3000"
     restart: unless-stopped

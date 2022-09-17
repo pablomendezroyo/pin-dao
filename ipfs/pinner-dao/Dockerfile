@@ -12,7 +12,7 @@ RUN solc --abi PinnerDao.sol -o build
 FROM ethereum/client-go:alltools-latest as go-sc
 WORKDIR /usr/src/app
 COPY --from=abi /usr/src/app/build/TempNameDao.abi ./
-RUN abigen --abi=/usr/src/app/TempNameDao.abi --pkg=main --out=PinnerDao.go
+RUN abigen --abi=/usr/src/app/TempNameDao.abi --pkg=contract --out=PinnerDao.go
 
 ###############################
 ## Build the go docker image ##
@@ -22,8 +22,7 @@ WORKDIR /usr/src/app
 
 # Needed to create binary to be executed in debian. See https://pkg.go.dev/cmd/cgo
 ENV CGO_ENABLED=0
-COPY ./ipfs/pinner-dao/src/ ./ 
-COPY --from=go-sc /usr/src/app/PinnerDao.go /usr/src/app/
-COPY --from=go-sc /usr/src/app/TempNameDao.abi /usr/src/app/
+COPY ./ipfs/pinner-dao/ ./ 
+COPY --from=go-sc /usr/src/app/PinnerDao.go /usr/src/app/contract/PinnerDao.go
 RUN go build
 ENTRYPOINT ["/usr/src/app/pinner-dao"]

@@ -6,6 +6,7 @@ services:
     - OPERATION=checker
     - REPO=https://github.com/aave/interface
     - COMMIT=a3a5e9737b6e7ba1731c9cc9b99852bcd933f57b
+    - IPFS_NODE=http://ipfs.dappnode:5001/
     - ENS=ENS_VALUE
     - PRIVATE_KEY=private_key_Value
     image: "check-tool"

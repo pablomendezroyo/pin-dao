@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+  script:
+    build: .
+    environment:
+    - OPERATION=checker
+    - REPO=https://github.com/aave/interface
+    - COMMIT=a3a5e9737b6e7ba1731c9cc9b99852bcd933f57b
+    - ENS=ENS_VALUE
+    - PRIVATE_KEY=private_key_Value
+    image: "check-tool"
+    restart: on-failure

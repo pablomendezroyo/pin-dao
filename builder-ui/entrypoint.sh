@@ -38,26 +38,28 @@ cat ./manifest.json
 
 npm i -g yarn
 
+yarn
+
 yarn build:static
 
 # 5. Update to IPFS
+echo "directorio tras el build"
+echo $(ls -a)
 
-ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r . --quiet | tee ../listHashesBuilt
+cp ./manifest.json ./out/manifest.json
+ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHashesBuilt
 
-echo "IPFS hash built" 
-#tail -1 ../listHashesBuilt # for testing
+#echo "IPFS hash built" 
+#cat ../listHashesBuilt
+tail -1 ../listHashesBuilt # for testing
+echo "IPFS_HASH_BUILT:"
 IPFS_HASH_BUILT=$(tail -1 ../listHashesBuilt)
-
-# curl    --connect-timeout 5 \
-#         --max-time 10 \
-#         --retry 5 \
-#         --retry-delay 0 \
-#         --retry-max-time 40 \
-#         -X POST "http://my.dappnode/data-send?key=IPFS_URL&data=http://${IPFS_HASH_BUILT}.ipfs.ipfs.dappnode:8080/" \
-#         || { echo "[ERROR] failed to post the UI_IPFS_HASH IPFS to dappmanager"; }
+echo "IPFS_HASH_CODED:"
+IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_BUILT)
+echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
 
  echo $(ls -a)
- "Falta como acceder a una web en IPFS y no solo a sus archivos"
+ #echo "Falta como acceder a una web en IPFS y no solo a sus archivos"
 
 }
 

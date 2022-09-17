@@ -61,7 +61,27 @@ export default function DomainsTable({
                   >
                     <img
                       src="/assets/open-in-new.svg"
-                      alt="open-in-new"
+                      alt="open-in-ipfs"
+                      height={30}
+                    />
+                  </Button>
+                  <Button
+                    href={
+                      process.env.REACT_APP_DAPPNODE_URL +
+                      "/ipfs/" +
+                      row.ipfsHash.substring(6)
+                    }
+                  >
+                    <img
+                      src="/assets/dappnode_logo.png"
+                      alt="open-in-dappnode"
+                      height={30}
+                    />
+                  </Button>
+                  <Button href={row.ipfsHash.substring(6) + "limo"}>
+                    <img
+                      src="/assets/open-in-new.svg"
+                      alt="open-in-limo"
                       height={30}
                     />
                   </Button>

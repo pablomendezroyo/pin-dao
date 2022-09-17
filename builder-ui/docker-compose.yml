@@ -4,9 +4,8 @@ services:
     build: .
     environment:
     - OPERATION=checker
-    - REPO=https://github.com/aave/interface
-    - COMMIT=a3a5e9737b6e7ba1731c9cc9b99852bcd933f57b
-    - IPFS_NODE=http://ipfs.dappnode:5001/
+    - REPO=https://github.com/dappnode/welcome
+    - COMMIT=c83f85de57a5c28103364b55c1baf59867cf9b66
     - ENS=ENS_VALUE
     - PRIVATE_KEY=private_key_Value
     image: "check-tool"

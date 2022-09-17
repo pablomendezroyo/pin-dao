@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	pinner_dao "./sc"
-
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
@@ -13,7 +11,7 @@ import (
 const smart_contract_address = "0x0000000000000000000000000000000000000000"
 
 func get_ens_list(eth_client_provider *ethclient.Client) []string {
-	sc, err := pinner_dao.NewPinnerDao(common.HexToAddress(smart_contract_address), eth_client_provider)
+	sc, err := NewPinnerDao(common.HexToAddress(smart_contract_address), eth_client_provider)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to instantiate a smart contract: %v ", err)
 		os.Exit(1)

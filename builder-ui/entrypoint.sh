@@ -1,10 +1,17 @@
 #!/bin/bash -x
 
 
-## INPUTS(Github Repo, commit, ENS, IPFSNode, isChecker, PrivateKey)
+## INPUTS(Github Repo, commit, ENS, IPFSNode, isChecker)
 
 
 ## Operation functions
+
+# Propose Function
+## 1. Download files from the github (no-built)
+## 2. Update repo content to IPFS
+## 3. Generating the manifest
+## 4. Make the build of the not-built content
+## 5. IPFS build TODO its required to show the UI not only se it 
 propose () {
 
 # 1. Download github repo content of a determined commit
@@ -27,7 +34,6 @@ cat << EOF > "manifest.json"
 {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILT", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
-
 
 # 4. Build the content
 
@@ -56,15 +62,27 @@ echo $(ls -a)
 
 }
 
+# Checker(IPFS_HASH_REPO, IPFS_HASH_BUILT)
+## 1. Download files from the Hash IPFS (no-built)
+## 2. Download files from the Hash IPFS (built)
+## 3. Generating the manifest
+## 4. Make the build of the not-built content
+## 5. IPFS build
+## 6. Check
+
+validate () {
+    echo "hols"
+    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get bafybeibozpulxtpv5nhfa2ue3dcjx23ndh3gwr5vwllk7ptoyfwnfjjr4q  --output=/content --progress
+    echo $(ls -a /content)
+}
+
 ## Check what kind of operation will be executed:
-## - checker 
+## - validate 
 ## - proposer
 
-
-
-
 if [ ${OPERATION} == "checker" ]; then
-   echo "Check if the IPFS content mantains the integrity"
+    echo "Validate if the IPFS content mantains the integrity"
+    validate
 elif [ ${OPERATION} == 'proposer' ]
 then
     echo "Start the process of proposing an repository content to the DAO"
@@ -91,14 +109,6 @@ fi
 # cd repo
 # git checkout ${COMMIT}
 
-# Checker(IPFS_HASH_REPO, IPFS_HASH_BUILT)
-## 1. Download files from the Hash IPFS (no-built)
-## 2. Download files from the Hash IPFS (built)
-## 3. Generating the manifest
-## 4. Make the build of the not-built content
-## 5. IPFS build
-## 6. Check
-
 ## 1. Download the repo content from IPFS
 
 #ipfs ls QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
@@ -110,12 +120,6 @@ fi
 #echo "{ GH_REPO:$REPO,COMMIT:$COMMIT,IPFS_HASH_REPO:$VALUE3,ENS:$ENS }" > manifest.json
 
 
-# Proposer Function
-## 1. Download files from the github (no-built)
-## 2. Update repo content to IPFS
-## 3. Generating the manifest
-## 4. Make the build of the not-built content
-## 5. IPFS build
-## 6. SC addENS
+
 
 

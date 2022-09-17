@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  ipfs:
+    build:
+      context: ./
+      dockerfile: ./ipfs/node/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - "ipfs_export:/export"
+      - "ipfs_data:/data/ipfs"
+    ports:
+      - "4001:4001/tcp"
+      - "4002:4002/udp"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:5001:5001"
+  pinner-dao:
+    build:
+      context: ./
+      dockerfile: ./ipfs/pinner-dao/Dockerfile
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=development
+    depends_on:
+      - ipfs
+volumes:
+  ipfs_export: {}
+  ipfs_data: {}

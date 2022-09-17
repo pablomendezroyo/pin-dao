@@ -1,13 +1,13 @@
-#!/bin/bash -x
+#!/bin/bash
 
 
 ## Operation functions
 
 # Propose Function
-## 1. Download files from the github (no-built)
+## 1. Download files from the github (no-build)
 ## 2. Update repo content to IPFS
 ## 3. Generating the manifest
-## 4. Make the build of the not-built content
+## 4. Make the build of the not-build content
 ## 5. IPFS build TODO its required to show the UI not only se it 
 source ~/.nvm/nvm.sh
 
@@ -25,12 +25,12 @@ git checkout ${COMMIT}
 ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r . --quiet | tee ../listHashes
 
 #cat ../listHashes # for testing
-IPFS_HASH_NO_BUILT=$(tail -1 ../listHashes)
+IPFS_HASH_NO_build=$(tail -1 ../listHashes)
 
 # 3. Generate manifest
 
 cat << EOF > "manifest.json"
-{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILT", "ENS": "$ENS"}
+{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
 
@@ -47,34 +47,63 @@ echo "directorio tras el build"
 echo $(ls -a)
 
 cp ./manifest.json ./out/manifest.json
-ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHashesBuilt
+ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHashesbuild
 
-#echo "IPFS hash built" 
-#cat ../listHashesBuilt
-tail -1 ../listHashesBuilt # for testing
-echo "IPFS_HASH_BUILT:"
-IPFS_HASH_BUILT=$(tail -1 ../listHashesBuilt)
+#echo "IPFS hash build" 
+#cat ../listHashesbuild
+ # for testing
+echo "IPFS_HASH_build:"
+tail -1 ../listHashesbuild
+IPFS_HASH_build=$(tail -1 ../listHashesbuild)
 echo "IPFS_HASH_CODED:"
-IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_BUILT)
+IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_build)
 echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
-
- echo $(ls -a)
- #echo "Falta como acceder a una web en IPFS y no solo a sus archivos"
 
 }
 
-# Checker(IPFS_HASH_REPO, IPFS_HASH_BUILT)
-## 1. Download files from the Hash IPFS (no-built)
-## 2. Download files from the Hash IPFS (built)
+# Checker(IPFS_HASH_REPO, IPFS_HASH_build)
+## 1. Download files from the Hash IPFS (no-build)
+## 2. Download files from the Hash IPFS (build)
 ## 3. Generating the manifest
-## 4. Make the build of the not-built content
+## 4. Make the build of the not-build content
 ## 5. IPFS build
 ## 6. Check
 
 validate () {
-    echo "hols"
-    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get bafybeibozpulxtpv5nhfa2ue3dcjx23ndh3gwr5vwllk7ptoyfwnfjjr4q  --output=/content --progress
-    echo $(ls -a /content)
+    echo "  Validation process"
+    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_BUILD  --output=/build_repo_content
+    echo "ls of the build repo content $(ls -a /build_repo_content)"
+    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_REPO  --output=/initial_repo_content
+    echo $(ls -a /initial_repo_content)
+
+    ## 3. Generate manifest
+    cat << EOF > "manifest.json"
+    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
+EOF
+
+cat ./manifest.json
+    ## 4. make the build
+    cd ./initial_repo_content
+
+    npm i -g yarn
+    yarn
+    yarn build:static
+
+    ## add manifest
+    mv ../manifest.json ./out/manifest.json
+
+    cd ..
+
+    ## 5. IPFS build
+
+
+
+    ## 6. Calculate checksums + Check values
+
+    CHECKSUM_REPO=$(shasum -a256 "/initial_repo_content/out" )
+    CHECKSUM_BUILD=$(shasum -a256 "/build_repo_content" )
+    echo "Checksum repo $CHECKSUM_REPO"
+    echo "Checksum build $CHECKSUM_BUILD"
 }
 
 ## Check what kind of operation will be executed:
@@ -95,11 +124,11 @@ fi
 
 
 # OPTION EXTRA A
-# Checker(commit,repo, IPFS_HASH_BUILT)
-## 1. Download files from the Hash IPFS (no-built)
-## 2. Download files from the Hash IPFS (built)
+# Checker(commit,repo, IPFS_HASH_build)
+## 1. Download files from the Hash IPFS (no-build)
+## 2. Download files from the Hash IPFS (build)
 ## 3. Generating the manifest
-## 4. Make the build of the not-built content
+## 4. Make the build of the not-build content
 ## 5. IPFS build
 ## 6. Check
 
@@ -114,7 +143,7 @@ fi
 
 #ipfs ls QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
 
-## 2. Download files from the Hash IPFS (built)
+## 2. Download files from the Hash IPFS (build)
 
 ## 3. generating manifest (do it in jq or jo)
 

@@ -1,9 +1,6 @@
 #!/bin/bash -x
 
 
-## INPUTS(Github Repo, commit, ENS, IPFSNode, isChecker)
-
-
 ## Operation functions
 
 # Propose Function
@@ -12,6 +9,8 @@
 ## 3. Generating the manifest
 ## 4. Make the build of the not-built content
 ## 5. IPFS build TODO its required to show the UI not only se it 
+source ~/.nvm/nvm.sh
+
 propose () {
 
 # 1. Download github repo content of a determined commit
@@ -49,16 +48,16 @@ echo "IPFS hash built"
 #tail -1 ../listHashesBuilt # for testing
 IPFS_HASH_BUILT=$(tail -1 ../listHashesBuilt)
 
-curl    --connect-timeout 5 \
-        --max-time 10 \
-        --retry 5 \
-        --retry-delay 0 \
-        --retry-max-time 40 \
-        -X POST "http://my.dappnode/data-send?key=IPFS_URL&data=http://${IPFS_HASH_BUILT}.ipfs.ipfs.dappnode:8080/" \
-        || { echo "[ERROR] failed to post the UI_IPFS_HASH IPFS to dappmanager"; }
+# curl    --connect-timeout 5 \
+#         --max-time 10 \
+#         --retry 5 \
+#         --retry-delay 0 \
+#         --retry-max-time 40 \
+#         -X POST "http://my.dappnode/data-send?key=IPFS_URL&data=http://${IPFS_HASH_BUILT}.ipfs.ipfs.dappnode:8080/" \
+#         || { echo "[ERROR] failed to post the UI_IPFS_HASH IPFS to dappmanager"; }
 
-echo $(ls -a)
-"Falta como acceder a una web en IPFS y no solo a sus archivos"
+ echo $(ls -a)
+ "Falta como acceder a una web en IPFS y no solo a sus archivos"
 
 }
 
@@ -83,7 +82,7 @@ validate () {
 if [ ${OPERATION} == "checker" ]; then
     echo "Validate if the IPFS content mantains the integrity"
     validate
-elif [ ${OPERATION} == 'proposer' ]
+elif [ ${OPERATION} == 'propose' ]
 then
     echo "Start the process of proposing an repository content to the DAO"
     propose

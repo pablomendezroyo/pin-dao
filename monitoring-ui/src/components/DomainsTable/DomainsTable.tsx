@@ -6,12 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import { EnsHash } from "../../App";
-
-interface ENSRow {
-  domain: string;
-  ipfsHash: string;
-}
+import { EnsHash, EnsRow } from "../../types/types";
 
 function createRowData(domain: string, ipfsHash: string) {
   return { domain, ipfsHash };
@@ -22,18 +17,7 @@ export default function DomainsTable({
 }: {
   ensHashArray: EnsHash[];
 }) {
-  let rows: Array<ENSRow> = [];
-
-  /*rows = [
-    createRowData(
-      "hi.pinnerdao.eth",
-      "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
-    ),
-    createRowData(
-      "test.pinnerdao.eth",
-      "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"
-    ),
-  ];*/
+  let rows: Array<EnsRow> = [];
 
   ensHashArray.forEach((ensHash) => {
     rows.push(createRowData(ensHash.domain, ensHash.hash));

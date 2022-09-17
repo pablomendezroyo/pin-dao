@@ -1,23 +1,28 @@
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./Navbar";
 import DomainsTable from "./components/DomainsTable/DomainsTable";
-import resolveEnsContentHash from "./logic/resolveEnsContentHash";
-
-export interface EnsHash {
-  domain: string;
-  hash: string;
-}
-
-/*const ensHashArray = [
-  {domain: "example.pinnerdao.eth", hash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"},
-  {domain: "test.pinnerdao.eth", hash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG"}
-]*/
+import getAllEnsHash from "./logic/getAllEnsHash";
+import { EnsHash } from "./types/types";
 
 function App() {
+  const [ensHashArray, setEnsHashArray] = useState<EnsHash[]>([]);
+
+  useEffect(() => {
+    const fetchFunction = async () => {
+      const response = await getAllEnsHash();
+      setEnsHashArray(response);
+    };
+
+    fetchFunction().catch((error) => {
+      console.log(error);
+    });
+  }, []);
+
   return (
     <div className="App">
       <Navbar />
-      <DomainsTable ensHashArray={[]} />
+      <DomainsTable ensHashArray={ensHashArray} />
     </div>
   );
 }

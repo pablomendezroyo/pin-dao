@@ -1,11 +1,15 @@
 import { ethers } from "ethers";
 
-const provider = new ethers.providers.JsonRpcProvider();
+const providerUrl = "https://rpc.ankr.com/eth_rinkeby";
+const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 
-export default async function getPinnedDomains() {
+export default async function getPinnedDomains(): Promise<string[]> {
   let contract = new ethers.Contract(
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    ["function getDomains() public view returns (string[] memory)"],
+    "0xd2d2AFb9CDAc195d0a665F526B6Ef137118F1291",
+    ["function getENSList() public pure override returns (string[] memory)"],
     provider
   );
+
+  let pinnedEns = await contract.getENSList();
+  return pinnedEns;
 }

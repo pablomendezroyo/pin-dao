@@ -5,6 +5,6 @@ const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 
 export default async function getHashFromEns(ensName: string) {
   const resolver = await provider.getResolver(ensName);
-  const hash = await resolver!.getContentHash();
+  const hash = await resolver?.getContentHash();
   return hash;
 }

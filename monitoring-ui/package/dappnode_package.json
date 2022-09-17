@@ -1,0 +1,20 @@
+{
+  "name": "pinner-dao.public.dappnode.eth",
+  "version": "0.1.0",
+  "description": "Lipsum exem",
+  "type": "service",
+  "architectures": ["linux/amd64"],
+  "categories": ["Blockchain"],
+  "links": {
+    "homepage": "https://www.mysterium.network/",
+    "Repository": "https://github.com/pablomendezroyo/pin-dao"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dappnode/DAppNodePackage-Mysterium.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dappnode/DAppNodePackage-Mysterium/issues"
+  },
+  "license": "GPL-3.0"
+}

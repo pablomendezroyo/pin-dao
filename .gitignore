@@ -1,4 +1,4 @@
-/monitoring-ui/ui/node_modules/
-/monitoring-ui/ui/files-to-upload/
-/monitoring-ui/ui/data/
-/monitoring-ui/ui/ipfs/
+/monitoring-ui/package/ui/node_modules/
+/monitoring-ui/package/ui/files-to-upload/
+/monitoring-ui/package/ui/data/
+/monitoring-ui/package/ui/ipfs/

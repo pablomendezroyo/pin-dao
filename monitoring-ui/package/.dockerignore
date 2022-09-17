@@ -1,0 +1,10 @@
+./ui/node_modules
+./ui/npm-debug.log
+./ui/Dockerfile*
+./ui/docker-compose*
+./ui/.dockerignore
+./ui/.git
+./ui/.gitignore
+./ui/README.md
+./ui/LICENSE
+./ui/.vscode

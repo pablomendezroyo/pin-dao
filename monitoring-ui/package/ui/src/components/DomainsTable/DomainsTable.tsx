@@ -78,9 +78,9 @@ export default function DomainsTable({
                       height={30}
                     />
                   </Button>
-                  <Button href={row.ipfsHash.substring(6) + "limo"}>
+                  <Button href={"https://" + row.domain.substring(6) + ".limo"}>
                     <img
-                      src="/assets/open-in-new.svg"
+                      src="/assets/limo.png"
                       alt="open-in-limo"
                       height={30}
                     />

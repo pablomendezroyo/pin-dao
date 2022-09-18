@@ -87,7 +87,6 @@ cat ./manifest.json
     cd ./initial_repo_content
 
     npm i -g yarn
-    sleep 210000
     yarn
     yarn build:static
 

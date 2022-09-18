@@ -8,6 +8,6 @@ services:
     - COMMIT=6448b63e05301376ad7b947c60257d3dac866ab0
     - IPFS_HASH_BUILD=QmQBj8smEEkaFb6Z2Qg3LbbTAHko4pnVvZTmNdSogwghUd
     - IPFS_HASH_REPO=Qme939xHQnKSTxod8ceogiaLgiFyt6ya16XSk5Nqn7Lc9B
-    - ENS=test.pinnerdao.eth
+    - ENS=aave.web.pinnerdao.eth
     image: "check-tool"
     restart: on-failure

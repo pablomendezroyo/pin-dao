@@ -1,0 +1,32 @@
+version: "2"
+fields:
+  - id: operation
+    target:
+      type: environment
+      name: OPERATION
+      service: script
+    title: Operation
+    description: >-
+      Select what kind of operation you want to do: Propose or Validate
+    enum:
+      - propose
+      - validate
+    required: true
+  - id: commit
+    target:
+      type: environment
+      name: COMMIT
+      service: script
+    title: Commit hash
+    maxLength: 32
+    description: >-
+      Hash of the commit of the repository you want to upload the UI.
+  - id: repositoryUrl
+    target:
+      type: environment
+      name: REPO
+      service: script
+    title: Repository URL
+    description: >-
+      URL of the repository you want to build.
+    required: false

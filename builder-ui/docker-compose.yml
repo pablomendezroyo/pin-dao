@@ -3,11 +3,15 @@ services:
   script:
     build: .
     environment:
-    - OPERATION=propose
-    - REPO=https://github.com/aave/interface
-    - COMMIT=6448b63e05301376ad7b947c60257d3dac866ab0
-    - IPFS_HASH_BUILD=QmQBj8smEEkaFb6Z2Qg3LbbTAHko4pnVvZTmNdSogwghUd
-    - IPFS_HASH_REPO=Qme939xHQnKSTxod8ceogiaLgiFyt6ya16XSk5Nqn7Lc9B
-    - ENS=test.pinnerdao.eth
-    image: "check-tool"
+      - OPERATION=propose
+      - "REPO=https://github.com/aave/interface"
+      - COMMIT=6448b63e05301376ad7b947c60257d3dac866ab0
+      - IPFS_HASH_BUILD=QmQBj8smEEkaFb6Z2Qg3LbbTAHko4pnVvZTmNdSogwghUd
+      - IPFS_HASH_REPO=Qme939xHQnKSTxod8ceogiaLgiFyt6ya16XSk5Nqn7Lc9B
+      - ENS=test.pinnerdao.eth
+    image: "script.build-tool.public.dappnode.eth:0.1.0"
     restart: on-failure
+    volumes:
+      - "data:/data"
+volumes:
+  data: {}

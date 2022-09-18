@@ -8,12 +8,12 @@
 ## 3. Generating the manifest
 ## 4. Make the build of the not-build content
 ## 5. IPFS build TODO its required to show the UI not only se it 
-source ~/.nvm/nvm.sh
+
 
 propose () {
 
 # 1. Download github repo content of a determined commit
-[ ! -d "./repo" ] && git clone ${REPO} repo
+[ ! -d "./repo" ] && git clone --bare ${REPO} repo
 
 # # check commit exists()instead  clone master
 cd repo
@@ -32,8 +32,10 @@ cat << EOF > "manifest.json"
 {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILD", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
-CHECKSUM_REPO=$(tar cvf - /repo | sha1sum)
+CHECKSUM_REPO=$(tar cvf - ./repo | sha1sum)
 # 4. Build the content
+
+source ~/.nvm/nvm.sh
 
 npm i -g yarn
 

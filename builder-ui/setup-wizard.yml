@@ -9,15 +9,15 @@ fields:
     description: >-
       Select what kind of operation you want to do: Propose or Validate
     enum:
-      - Propose
-      - Validate
+      - propose
+      - validate
     required: true
   - id: commit
     target:
       type: environment
       name: COMMIT
       service: script
-    title: Graffiti
+    title: Commit hash
     maxLength: 32
     description: >-
       Hash of the commit of the repository you want to upload the UI.

@@ -1,7 +1,7 @@
 {
     "name": "build-tool.public.dappnode.eth",
     "version": "0.1.0",
-    "description": "Lipsum exem",
+    "description": "Package to build and upload content to IPFS",
     "type": "service",
     "architectures": ["linux/amd64"],
     "categories": ["Blockchain"],

@@ -1,10 +1,16 @@
 #!/bin/bash -x
 
 
-## INPUTS(Github Repo, commit, ENS, IPFSNode, isChecker, PrivateKey)
-
-
 ## Operation functions
+
+# Propose Function
+## 1. Download files from the github (no-build)
+## 2. Update repo content to IPFS
+## 3. Generating the manifest
+## 4. Make the build of the not-build content
+## 5. IPFS build TODO its required to show the UI not only se it 
+source ~/.nvm/nvm.sh
+
 propose () {
 
 # 1. Download github repo content of a determined commit
@@ -16,56 +22,100 @@ git checkout ${COMMIT}
 
 # 2. Upload the content to IPFS
 ## Upload to IPFS and save hashes
-ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r . --quiet | tee ../listHashes
+ipfs --api=/dns/ipfs.dappnode/tcp/5001 add --hidden -p -r . --quiet | tee ../listHashes
 
 #cat ../listHashes # for testing
-IPFS_HASH_NO_BUILT=$(tail -1 ../listHashes)
+IPFS_HASH_NO_build=$(tail -1 ../listHashes)
 
 # 3. Generate manifest
 
 cat << EOF > "manifest.json"
-{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILT", "ENS": "$ENS"}
+{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
-
 
 # 4. Build the content
 
 npm i -g yarn
 
+yarn
+
 yarn build:static
 
 # 5. Update to IPFS
-
-ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r . --quiet | tee ../listHashesBuilt
-
-echo "IPFS hash built" 
-#tail -1 ../listHashesBuilt # for testing
-IPFS_HASH_BUILT=$(tail -1 ../listHashesBuilt)
-
-curl    --connect-timeout 5 \
-        --max-time 10 \
-        --retry 5 \
-        --retry-delay 0 \
-        --retry-max-time 40 \
-        -X POST "http://my.dappnode/data-send?key=IPFS_URL&data=http://${IPFS_HASH_BUILT}.ipfs.ipfs.dappnode:8080/" \
-        || { echo "[ERROR] failed to post the UI_IPFS_HASH IPFS to dappmanager"; }
-
+echo "directorio tras el build"
 echo $(ls -a)
-"Falta como acceder a una web en IPFS y no solo a sus archivos"
+
+cp ./manifest.json ./out/manifest.json
+ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHashesbuild
+
+#echo "IPFS hash build" 
+#cat ../listHashesbuild
+ # for testing
+echo "IPFS_HASH_build:"
+tail -1 ../listHashesbuild
+IPFS_HASH_build=$(tail -1 ../listHashesbuild)
+echo "IPFS_HASH_CODED:"
+IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_build)
+echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
 
 }
 
+# Checker(IPFS_HASH_REPO, IPFS_HASH_build)
+## 1. Download files from the Hash IPFS (no-build)
+## 2. Download files from the Hash IPFS (build)
+## 3. Generating the manifest
+## 4. Make the build of the not-build content
+## 5. IPFS build
+## 6. Check
+
+validate () {
+    echo "  Validation process"
+    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_BUILD  --output=/build_repo_content
+    echo "ls of the build repo content $(ls -a /build_repo_content)"
+    ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_REPO  --output=/initial_repo_content
+    echo $(ls -a /initial_repo_content)
+
+    ## 3. Generate manifest
+    echo "Generate manifest"
+    cat << EOF > "manifest.json"
+    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
+EOF
+
+cat ./manifest.json
+    ## 4. make the build
+    cd ./initial_repo_content
+
+    npm i -g yarn
+    sleep 210000
+    yarn
+    yarn build:static
+
+    ## add manifest
+    mv ../manifest.json ./out/manifest.json
+
+    cd ..
+
+    ## 5. IPFS build
+
+
+
+    ## 6. Calculate checksums + Check values
+
+    CHECKSUM_REPO=$(shasum -a256 "/initial_repo_content/out" )
+    CHECKSUM_BUILD=$(shasum -a256 "/build_repo_content" )
+    echo "Checksum repo $CHECKSUM_REPO"
+    echo "Checksum build $CHECKSUM_BUILD"
+}
+
 ## Check what kind of operation will be executed:
-## - checker 
+## - validate 
 ## - proposer
 
-
-
-
 if [ ${OPERATION} == "checker" ]; then
-   echo "Check if the IPFS content mantains the integrity"
-elif [ ${OPERATION} == 'proposer' ]
+    echo "Validate if the IPFS content mantains the integrity"
+    validate
+elif [ ${OPERATION} == 'propose' ]
 then
     echo "Start the process of proposing an repository content to the DAO"
     propose
@@ -76,11 +126,11 @@ fi
 
 
 # OPTION EXTRA A
-# Checker(commit,repo, IPFS_HASH_BUILT)
-## 1. Download files from the Hash IPFS (no-built)
-## 2. Download files from the Hash IPFS (built)
+# Checker(commit,repo, IPFS_HASH_build)
+## 1. Download files from the Hash IPFS (no-build)
+## 2. Download files from the Hash IPFS (build)
 ## 3. Generating the manifest
-## 4. Make the build of the not-built content
+## 4. Make the build of the not-build content
 ## 5. IPFS build
 ## 6. Check
 
@@ -91,31 +141,17 @@ fi
 # cd repo
 # git checkout ${COMMIT}
 
-# Checker(IPFS_HASH_REPO, IPFS_HASH_BUILT)
-## 1. Download files from the Hash IPFS (no-built)
-## 2. Download files from the Hash IPFS (built)
-## 3. Generating the manifest
-## 4. Make the build of the not-built content
-## 5. IPFS build
-## 6. Check
-
 ## 1. Download the repo content from IPFS
 
 #ipfs ls QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
 
-## 2. Download files from the Hash IPFS (built)
+## 2. Download files from the Hash IPFS (build)
 
 ## 3. generating manifest (do it in jq or jo)
 
 #echo "{ GH_REPO:$REPO,COMMIT:$COMMIT,IPFS_HASH_REPO:$VALUE3,ENS:$ENS }" > manifest.json
 
 
-# Proposer Function
-## 1. Download files from the github (no-built)
-## 2. Update repo content to IPFS
-## 3. Generating the manifest
-## 4. Make the build of the not-built content
-## 5. IPFS build
-## 6. SC addENS
+
 
 

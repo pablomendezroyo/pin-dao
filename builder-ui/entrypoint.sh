@@ -113,15 +113,15 @@ cat ./manifest.json
 ## - validate 
 ## - proposer
 
-if [ ${OPERATION} == "checker" ]; then
+if [ ${OPERATION} == "validate" ]; then
     echo "Validate if the IPFS content mantains the integrity"
     validate
-elif [ ${OPERATION} == 'propose' ]
+elif [ ${OPERATION} == "propose" ]
 then
     echo "Start the process of proposing an repository content to the DAO"
     propose
 else
-    echo "Invalid operation: the value ${OPERATION} must be checker or proposer"
+    echo "Invalid operation: the value ${OPERATION} must be validate or propose"
     exit 1
 fi
 

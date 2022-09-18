@@ -1,7 +1,7 @@
 #!/bin/bash
 
-REACT_APP_DAPPNODE_URL=https://pinnerdao.${_DAPPNODE_GLOBAL_DOMAIN}
+set -x
 
-echo "${REACT_APP_DAPPNODE_URL}"
+cd /usr/src/app
 
-npm start
+exec REACT_APP_DAPPNODE_URL=https://ipfs.${_DAPPNODE_GLOBAL_DOMAIN} npm start

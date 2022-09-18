@@ -14,5 +14,4 @@ RUN npm install --silent
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # start app
-#ENTRYPOINT [ "entrypoint.sh" ]
-CMD ["npm", "start"]
+ENTRYPOINT /bin/bash /usr/local/bin/entrypoint.sh

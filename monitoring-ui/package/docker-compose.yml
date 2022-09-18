@@ -1,0 +1,6 @@
+version: "3.5"
+services:
+  pin-dao-ui:
+    build: .
+    image: "pin-dao-ui.pin-dao-ui.public.dappnode.eth:0.1.0"
+    restart: unless-stopped

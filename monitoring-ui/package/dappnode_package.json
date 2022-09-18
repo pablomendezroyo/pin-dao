@@ -1,0 +1,16 @@
+{
+  "name": "pin-dao-ui.public.dappnode.eth",
+  "version": "0.1.0",
+  "description": "Pinner DAO UI for monitoring pinned ENS domains in IPFS",
+  "type": "service",
+  "author": "dsimog",
+  "categories": ["Developer tools"],
+  "links": {
+    "homepage": "https://your-project-homepage-or-docs.io",
+    "ui": "http://pin-dao-ui.pin-dao-ui.public.dappnode:3000/"
+  },
+  "license": "GPL-3.0",
+  "globalEnvs": {
+    "all": true
+  }
+}

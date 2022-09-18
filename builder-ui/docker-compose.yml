@@ -3,10 +3,11 @@ services:
   script:
     build: .
     environment:
-    - OPERATION=checker
-    - REPO=https://github.com/dappnode/welcome
-    - COMMIT=c83f85de57a5c28103364b55c1baf59867cf9b66
-    - ENS=ethereum.eth
-    - PRIVATE_KEY=private_key_Value
+    - OPERATION=propose
+    - REPO=https://github.com/aave/interface
+    - COMMIT=6448b63e05301376ad7b947c60257d3dac866ab0
+    - IPFS_HASH_BUILD=QmQBj8smEEkaFb6Z2Qg3LbbTAHko4pnVvZTmNdSogwghUd
+    - IPFS_HASH_REPO=Qme939xHQnKSTxod8ceogiaLgiFyt6ya16XSk5Nqn7Lc9B
+    - ENS=test.pinnerdao.eth
     image: "check-tool"
     restart: on-failure

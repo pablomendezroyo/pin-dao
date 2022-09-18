@@ -5,6 +5,7 @@ import DomainsTable from "./components/DomainsTable/DomainsTable";
 import getAllEnsHash from "./logic/getAllEnsHash";
 import { EnsHash } from "./types/types";
 import { CircularProgress } from "@mui/material";
+import { loopReload } from "./logic/LoopReloader";
 
 function App() {
   const [ensHashArray, setEnsHashArray] = useState<EnsHash[]>([]);
@@ -19,6 +20,8 @@ function App() {
       console.log(error);
     });
   }, []);
+
+  loopReload();
 
   return (
     <div className="App">

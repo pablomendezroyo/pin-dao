@@ -32,7 +32,7 @@ cat << EOF > "manifest.json"
 {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILD", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
-CHECKSUM_REPO=$(tar cvf - /initial_repo_content/out | sha256sum)
+CHECKSUM_REPO=$(tar cvf - /repo | sha1sum)
 # 4. Build the content
 
 npm i -g yarn
@@ -44,6 +44,8 @@ yarn build:static
 # 5. Update to IPFS
 echo "directorio tras el build"
 echo $(ls -a)
+CHECKSUM_BUILD_NO_MANIFEST=$(tar cvf - ./out | sha1sum )
+
 
 cp ./manifest.json ./out/manifest.json
 ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHashesbuild
@@ -59,10 +61,10 @@ IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_BUILD)
 echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
 
 
-CHECKSUM_BUILD=$(tar cvf - ./out | sha256sum )
+CHECKSUM_BUILD=$(tar cvf - ./out | sha1sum )
 echo "Checksum repo $CHECKSUM_REPO"
 echo "Checksum build $CHECKSUM_BUILD"
-
+echo "Checksum build no manifest $CHECKSUM_BUILD_NO_MANIFEST"
 }
 
 # Checker(IPFS_HASH_REPO, IPFS_HASH_build)
@@ -76,7 +78,7 @@ echo "Checksum build $CHECKSUM_BUILD"
 validate () {
     echo "  Validation process"
     ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_BUILD  --output=/build_repo_content
-    CHECKSUM_REPO=$(tar cvf - /initial_repo_content/out | sha256sum)
+    CHECKSUM_REPO=$(tar cvf - /initial_repo_content/out | sha1sum)
     echo "ls of the build repo content $(ls -a /build_repo_content)"
     ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_REPO  --output=/initial_repo_content
     echo $(ls -a /initial_repo_content)
@@ -102,7 +104,7 @@ cat ./manifest.json
 
     ## 6. Calculate checksums + Check values
     
-    CHECKSUM_BUILD=$(tar cvf - /build_repo_content | sha256sum )
+    CHECKSUM_BUILD=$(tar cvf - /build_repo_content | sha1sum )
     echo "Checksum repo $CHECKSUM_REPO"
     echo "Checksum build $CHECKSUM_BUILD"
 }

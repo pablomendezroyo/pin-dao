@@ -6,7 +6,6 @@
     "architectures": ["linux/amd64"],
     "categories": ["Blockchain"],
     "links": {
-      "homepage": "https://www.mysterium.network/",
       "Repository": "https://github.com/pablomendezroyo/pin-dao"
     },
     "repository": {

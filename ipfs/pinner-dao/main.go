@@ -18,6 +18,7 @@ func main() {
 	var eth_client = get_eth_client(eth_rpc_url)
 	// Get the smart contract instance
 	var ensList = get_ens_list(eth_client)
+	fmt.Println("ENS List:", ensList)
 
 	// Resolve the list of ENS names to IPFS hashes
 	var ipfsBuildHashList = resolve_ens_list(ensList, eth_client)

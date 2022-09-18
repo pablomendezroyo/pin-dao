@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 
 ## Operation functions
@@ -22,7 +22,7 @@ git checkout ${COMMIT}
 
 # 2. Upload the content to IPFS
 ## Upload to IPFS and save hashes
-ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r . --quiet | tee ../listHashes
+ipfs --api=/dns/ipfs.dappnode/tcp/5001 add --hidden -p -r . --quiet | tee ../listHashes
 
 #cat ../listHashes # for testing
 IPFS_HASH_NO_build=$(tail -1 ../listHashes)
@@ -77,6 +77,7 @@ validate () {
     echo $(ls -a /initial_repo_content)
 
     ## 3. Generate manifest
+    echo "Generate manifest"
     cat << EOF > "manifest.json"
     {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
 EOF
@@ -86,6 +87,7 @@ cat ./manifest.json
     cd ./initial_repo_content
 
     npm i -g yarn
+    sleep 210000
     yarn
     yarn build:static
 

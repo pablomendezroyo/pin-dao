@@ -130,15 +130,8 @@ abstract contract PublicResolver {
     function setContenthash(bytes32 node, bytes calldata hash) external virtual;
 }
 
-abstract contract ITempNameDao {
-    function getENSList() public virtual pure returns (string[] memory);
-    function addEns(string memory subdomain, string memory hash) public virtual;
-}
-
-contract TempNameDao is ITempNameDao, Ownable {
+contract PinDao is Ownable {
     string domain;
-    uint totalSubdomains;
-    mapping(string => string) subdomains;
     string[] subdomainArray;
     ENSRegistryWithFallback registryContract;
     PublicResolver resolverContract;
@@ -151,8 +144,7 @@ contract TempNameDao is ITempNameDao, Ownable {
     event EnsRemoved(string ensName);
 
     constructor() {
-        domain = "htest.hehehehehe.eth";
-        totalSubdomains = 0;
+        domain = "itest.hehehehehe.eth";
         registryContract = ENSRegistryWithFallback(registryContractAddress);
         resolverContract = PublicResolver(resolverAddress);
     }
@@ -165,19 +157,19 @@ contract TempNameDao is ITempNameDao, Ownable {
         );
     }
 
-    function getOwner(string memory subdomainName, string memory nodeDomain) public view returns (address) {
-        bytes32 node = bytes(string.concat(subdomainName, ".", nodeDomain)).namehash();
-        return (registryContract.owner(node));
-    }
-
-    function addContenthash(string memory nodeDomain, string memory hash) public onlyOwner {
+    function addContenthash(string memory nodeDomain, bytes calldata hash) public onlyOwner {
         resolverContract.setContenthash(
             bytes(nodeDomain).namehash(),
-            bytes(hash)
+            hash
         );
     }
 
-    function addEns(string memory subdomainName, string memory hash) public onlyOwner override {
+    // Testing purposes
+    function addElement(string memory element) public onlyOwner {
+        subdomainArray.push(element);
+    }
+
+    function addEns(string memory subdomainName, bytes calldata hash) public onlyOwner {
         bytes32 node = bytes(domain).namehash();
         //bytes32 node = 0x0245cc5c2a2d9a0b9089a4eb1a7c954176d6c8f51ce1b6a0e49dbc215c764d8f;
         bytes32 subdomain = keccak256(bytes(subdomainName));
@@ -188,39 +180,52 @@ contract TempNameDao is ITempNameDao, Ownable {
             resolverAddress,
             0
         );
+        string memory ens = string.concat(subdomainName, ".", domain);
+        addContenthash(ens, hash);
 
-        addContenthash(string.concat(subdomainName, ".", domain), hash);
-
-        subdomains[subdomainName] = hash;
+        addElement(ens);
+        emit EnsUpdated(ens);
     }
 
-    function getENSList() public pure override returns (string[] memory) {
-        string[] memory ensString = new string[](3);
-        ensString[0] = "subdomain1.hehehehehe.eth";
-        ensString[1] = "mysubdomain.hehehehehe.eth";
-        ensString[2] = "yoursubdomain.hehehehehe.eth";
-        return (ensString);
+    // Testing purposes
+    function removeLastElement() public onlyOwner {
+        subdomainArray.pop();
     }
 
+    function removeEns(string memory subdomainName) public onlyOwner {
+        removeLastElement();
+        emit EnsRemoved(string.concat(subdomainName, ".", domain));
+    }
+
+    // Testing purposes
+    function getENSList() public view returns (string[] memory) {
+        return (subdomainArray);
+    }
+
+    // Testing purposes
     function getNameHash(string calldata subdomain) public view returns (bytes32) {
         bytes32 node = bytes(string.concat(subdomain, domain)).namehash();
         return (node);
     }
 
+    // Testing purposes
     function getNameHashString(string calldata s) public pure returns (bytes32) {
         bytes32 node = bytes(s).namehash();
         return (node);
     }
 
+    // Testing purposes
     function getName(string calldata subdomain) public view returns (string memory) {
         return (string.concat(subdomain, ".", domain));
     }
 
+    // Testing purposes
     function getSHA3(string calldata s) public pure returns (bytes32) {
         bytes32 coded = keccak256(bytes(s));
         return (coded);
     }
 
+    // Testing purposes
     function getBytes(string calldata s) public pure returns (bytes memory) {
         return (bytes(s));
     }

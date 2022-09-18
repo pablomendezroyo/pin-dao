@@ -21,14 +21,14 @@ propose() {
     ipfs --api=/dns/"${IPFS_URL}"/tcp/5001 add --hidden -p -r . --quiet | tee ../listHashes
 
     # cat ../listHashes # for testing
-    IPFS_HASH_BUILD=$(tail -1 ../listHashes)
+    IPFS_HASH_REPO=$(tail -1 ../listHashes)
 
     yarn
     yarn build:static
 
     # Generate manifest_dappnode
     cat <<EOF >"manifest_dappnode.json"
-{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_BUILD", "ENS": "$ENS"}
+{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_REPO", "ENS": "$ENS"}
 EOF
     mv manifest_dappnode.json "./${OUT_DIR}"
 
@@ -57,18 +57,18 @@ validate() {
     ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_REPO --output=./initial_repo_content
     echo $(ls -a /initial_repo_content)
 
-    # Generate manifest_dappnode
-    echo "Generate manifest_dappnode"
-    cat <<EOF >"manifest_dappnode.json"
-    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_REPO", "ENS": "$ENS"}
-EOF
-    mv manifest_dappnode.json build_repo_content
-
     cd ./initial_repo_content
 
     npm i -g yarn
     yarn
     yarn build:static
+
+    # Generate manifest_dappnode
+    echo "Generate manifest_dappnode"
+    cat <<EOF >"manifest_dappnode.json"
+    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_REPO", "ENS": "$ENS"}
+EOF
+    mv manifest_dappnode.json initial_repo_content/"${OUT_DIR}"
 
     ## 6. Calculate checksums + Check values
 

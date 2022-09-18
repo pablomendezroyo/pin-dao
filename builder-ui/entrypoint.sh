@@ -1,6 +1,5 @@
 #!/bin/bash -x
 
-
 ## Operation functions
 
 # Propose Function
@@ -25,15 +24,15 @@ git checkout ${COMMIT}
 ipfs --api=/dns/ipfs.dappnode/tcp/5001 add --hidden -p -r . --quiet | tee ../listHashes
 
 #cat ../listHashes # for testing
-IPFS_HASH_NO_build=$(tail -1 ../listHashes)
+IPFS_HASH_NO_BUILD=$(tail -1 ../listHashes)
 
 # 3. Generate manifest
 
 cat << EOF > "manifest.json"
-{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
+{"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILD", "ENS": "$ENS"}
 EOF
 cat ./manifest.json
-
+CHECKSUM_REPO=$(tar cvf - /initial_repo_content/out | sha256sum)
 # 4. Build the content
 
 npm i -g yarn
@@ -52,12 +51,17 @@ ipfs --api=/dns/ipfs.dappnode/tcp/5001 add -p -r ./out --quiet | tee ../listHash
 #echo "IPFS hash build" 
 #cat ../listHashesbuild
  # for testing
-echo "IPFS_HASH_build:"
+echo "IPFS_HASH_BUILD:"
 tail -1 ../listHashesbuild
-IPFS_HASH_build=$(tail -1 ../listHashesbuild)
+IPFS_HASH_BUILD=$(tail -1 ../listHashesbuild)
 echo "IPFS_HASH_CODED:"
-IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_build)
+IPFS_HASH_CODED=$(ipfs cid base32 $IPFS_HASH_BUILD)
 echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
+
+
+CHECKSUM_BUILD=$(tar cvf - ./out | sha256sum )
+echo "Checksum repo $CHECKSUM_REPO"
+echo "Checksum build $CHECKSUM_BUILD"
 
 }
 
@@ -72,6 +76,7 @@ echo "http://${IPFS_HASH_CODED}.ipfs.ipfs.dappnode:8080/"
 validate () {
     echo "  Validation process"
     ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_BUILD  --output=/build_repo_content
+    CHECKSUM_REPO=$(tar cvf - /initial_repo_content/out | sha256sum)
     echo "ls of the build repo content $(ls -a /build_repo_content)"
     ipfs --api=/dns/ipfs.dappnode/tcp/5001 get $IPFS_HASH_REPO  --output=/initial_repo_content
     echo $(ls -a /initial_repo_content)
@@ -79,7 +84,7 @@ validate () {
     ## 3. Generate manifest
     echo "Generate manifest"
     cat << EOF > "manifest.json"
-    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_build", "ENS": "$ENS"}
+    {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_NO_BUILD", "ENS": "$ENS"}
 EOF
 
 cat ./manifest.json
@@ -95,14 +100,9 @@ cat ./manifest.json
 
     cd ..
 
-    ## 5. IPFS build
-
-
-
     ## 6. Calculate checksums + Check values
-
-    CHECKSUM_REPO=$(shasum -a256 "/initial_repo_content/out" )
-    CHECKSUM_BUILD=$(shasum -a256 "/build_repo_content" )
+    
+    CHECKSUM_BUILD=$(tar cvf - /build_repo_content | sha256sum )
     echo "Checksum repo $CHECKSUM_REPO"
     echo "Checksum build $CHECKSUM_BUILD"
 }

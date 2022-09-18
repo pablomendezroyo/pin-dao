@@ -10,10 +10,15 @@ Pinners are subscribed to the SC of the DAO that returns the ENS under where the
 
 ## BUILDER-UI
 
-The Builder-UI is a toolkit that have mainly two options: **proposer**
+The Builder-UI is a toolkit that have mainly two options: **propose** and **validate**
+- Propose: this option allows user to create an IPFS hash of a website with the following inputs: Github repo, commit, ENS, Ipfs url. The output will be the IPFS hash of the built website uploaded to IPFS and the IPFS url to see the website uploaded. This hash is the one to be propose to the DAO to be pinned.
+- Validate: this option allow users to validate a proposal by running the toolkit and building and getting the IPFS hash locally. The output is a boolean of the validation between the build hash of the proposal and the build hash locally returned by the toolkit.
 ## DAO
+TBD
 
 ## Monitoring UI
+
+Interface to visualize the ENS voted in the DAO. These ENS will be resolved and renderize in the monitoring UI.
 
 
 ### Future

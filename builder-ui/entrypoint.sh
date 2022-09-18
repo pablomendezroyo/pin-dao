@@ -30,7 +30,7 @@ propose() {
     cat <<EOF >"manifest_dappnode.json"
 {"GH_REPO": "$REPO", "COMMIT": "$COMMIT", "IPFS_HASH_REPO": "$IPFS_HASH_BUILD", "ENS": "$ENS"}
 EOF
-    mv manifest_dappnode.json "./${OUT_DIR}"
+    mv manifest_dappnode.json "./${BUILD_DIR}"
 
     # Upload the build directory
     ipfs --api=/dns/"${IPFS_URL}"/tcp/5001 add -p -r ./"${BUILD_DIR}" --quiet | tee ../listHashesbuild

@@ -6,15 +6,14 @@
     "architectures": ["linux/amd64"],
     "categories": ["Blockchain"],
     "links": {
-      "homepage": "https://www.mysterium.network/",
-      "Repository": "https://github.com/pablomendezroyo/pin-dao"
+      "Repository": "https://github.com/pablomendezroyo/pin-dao/builder-ui"
     },
     "repository": {
       "type": "git",
-      "url": "https://github.com/dappnode/DAppNodePackage-Mysterium.git"
+      "url": "https://github.com/pablomendezroyo/pin-dao"
     },
     "bugs": {
-      "url": "https://github.com/dappnode/DAppNodePackage-Mysterium/issues"
+      "url": "https://github.com/pablomendezroyo/pin-dao/issues"
     },
     "license": "GPL-3.0"
   }

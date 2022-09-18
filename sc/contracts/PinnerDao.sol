@@ -130,7 +130,7 @@ abstract contract PublicResolver {
     function setContenthash(bytes32 node, bytes calldata hash) external virtual;
 }
 
-contract PinDao is Ownable {
+contract PinDaoManager is Ownable {
     string domain;
     string[] subdomainArray;
     ENSRegistryWithFallback registryContract;
@@ -144,7 +144,7 @@ contract PinDao is Ownable {
     event EnsRemoved(string ensName);
 
     constructor() {
-        domain = "itest.hehehehehe.eth";
+        domain = "web.pinnerdao.eth";
         registryContract = ENSRegistryWithFallback(registryContractAddress);
         resolverContract = PublicResolver(resolverAddress);
     }

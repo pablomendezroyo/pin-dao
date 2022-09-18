@@ -1,20 +1,16 @@
 {
-  "name": "pinner-dao.public.dappnode.eth",
+  "name": "pin-dao-ui.public.dappnode.eth",
   "version": "0.1.0",
-  "description": "Lipsum exem",
+  "description": "Pinner DAO UI for monitoring pinned ENS domains in IPFS",
   "type": "service",
-  "architectures": ["linux/amd64"],
-  "categories": ["Blockchain"],
+  "author": "dsimog",
+  "categories": ["Developer tools"],
   "links": {
-    "homepage": "https://www.mysterium.network/",
-    "Repository": "https://github.com/pablomendezroyo/pin-dao"
+    "homepage": "https://your-project-homepage-or-docs.io",
+    "ui": "http://pin-dao-ui.pin-dao-ui.public.dappnode:3000/"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dappnode/DAppNodePackage-Mysterium.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dappnode/DAppNodePackage-Mysterium/issues"
-  },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "globalEnvs": {
+    "all": true
+  }
 }

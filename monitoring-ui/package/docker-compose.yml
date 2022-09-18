@@ -1,11 +1,8 @@
 version: "3.5"
 services:
   pin-dao-ui:
-    container_name: pin-dao-ui
     build: .
-    image: "pin-dao-ui.pinner-dao.public.dappnode.eth:0.1.0"
+    image: "pin-dao-ui.pin-dao-ui.public.dappnode.eth:0.1.0"
     environment:
-      - REACT_APP_DAPPNODE_URL=https://pinnerdao.3009a247fd38367d.dyndns.dappnode.io/
-    ports:
-      - "3000:3000"
+      - REACT_APP_DAPPNODE_URL=SET_HERE
     restart: unless-stopped

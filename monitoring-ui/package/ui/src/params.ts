@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
 export const contractInfo = {
-  address: "0xc8BDAe8196ad92dAc0db3B3e1C74a9ac409fB93D",
+  address: "0x8aF9F4Bc25Fd5e8B8c3D41D6bDFFB80306918f71",
   abi: ["function getENSList() public pure override returns (string[] memory)"],
 };
 
